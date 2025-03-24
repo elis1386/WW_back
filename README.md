@@ -16,18 +16,10 @@ The API allows users to perform CRUD operations on books, authors, genres and us
 
 ## Table of content
 
-- [Team 5](#team-5)
 - [Getting started](#getting-started)
 - [Running tests](#running-tests)
 - [Project structure](#project-structure)
 - [Deployment](#deployment)
-
-## Team 5
-
-- [Quang Tri Cao](https://github.com/quangtricao) - Genres
-- [Elizaveta Pashkovskaya](https://github.com/elis1386) - Authors
-- [Thuy Hien Tran Nguyen](https://github.com/JuliaThTranNguyen) - Users
-- [Egor Bulgakov](https://github.com/arf1e) - Books
 
 ## Technologies
 
