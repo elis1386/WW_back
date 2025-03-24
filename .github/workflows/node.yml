@@ -1,0 +1,43 @@
+---
+name: Node.js Lint, Test, Build
+on: [pull_request, push]
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
+    env:
+      TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Lint & Build ~ Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm install
+      - name: Check for MMS cache
+        run: |
+          cd node_modules/mongodb-memory-server-global
+          node postinstall.js
+      - name: Lint
+        run: pnpm lint
+      - name: Test
+        run: pnpm test-coverage
+      - name: Build
+        run: pnpm build

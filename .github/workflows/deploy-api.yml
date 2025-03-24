@@ -1,0 +1,25 @@
+---
+name: Deploy API
+on:
+  push:
+    branches: [main, flow]
+  workflow_dispatch:  # So it's possible to manually retrigger the action
+jobs:
+  deploy-api:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pnpm install
+      - name: Lint
+        run: pnpm lint
+      - name: Compose production .env file
+        run: |
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_ADDRESS=${{ secrets.DB_ADDRESS }}" >> .env
+          echo "TOKEN_SECRET=${{ secrets.TOKEN_SECRET }}" >> .env
+          cat .env.example | grep "DB_URL" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+      - name: Restart PM2 process
+        run: pm2 restart library-api --silent

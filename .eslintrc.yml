@@ -1,0 +1,15 @@
+---
+env:
+  node: true  # We're using node
+  es6: true  # ...And we want to do spreads and rests
+rules:
+  import/prefer-default-export: 0  # We're doing named so it's easier to tell what's wrong when things break
+  no-console: 0  # We want to use console
+  '@typescript-eslint/no-unused-vars':  # Don't warn us about unused vars that have _ in front of them
+    - error
+    - argsIgnorePattern: ^_
+      varsIgnorePattern: ^_
+      caughtErrorsIgnorePattern: ^_
+extends: [eslint:recommended, plugin:@typescript-eslint/recommended]  # ... And except for that, we trust guys from eslint
+plugins: ['@typescript-eslint']
+parser: '@typescript-eslint/parser'
